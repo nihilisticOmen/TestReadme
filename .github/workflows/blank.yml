@@ -15,28 +15,47 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Generate-Contribution-Grid
-    steps:
-      # 步骤一：检出代码，以便访问提交历史
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    # name: Generate-Contribution-Grid
+    # steps:
+    #   # 步骤一：检出代码，以便访问提交历史
+    #   - uses: actions/checkout@v4
+    #     with:
+    #       fetch-depth: 0
       
-      # 步骤二：生成贡献图
-      # 将 'YOUR_USERNAME' 和 'YOUR_REPOSITORY_NAME' 替换为您的信息
-      # 您可以通过 'branch' 参数指定要分析的分支
-      - name: Generate Contribution Grid
-        uses: gruber-jo/github-contribution-grid-svg@v1.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          user_name: 'nihilisticOmen' # 您的GitHub用户名
-          repo_name: 'TestReadme' # 您的仓库名
-          branch: 'main' # 指定要统计的分支，例如 main 或 master
-          output_file: 'assets/contribution-grid.svg' # 输出图片文件的路径
+    #   # 步骤二：生成贡献图
+    #   # 将 'YOUR_USERNAME' 和 'YOUR_REPOSITORY_NAME' 替换为您的信息
+    #   # 您可以通过 'branch' 参数指定要分析的分支
+    #   - name: Generate Contribution Grid
+    #     uses: yoshi389111/github-contribution-grid-svg@v1.3.1
+    #     with:
+    #       github_token: ${{ secrets.GITHUB_TOKEN }}
+    #       user_name: 'nihilisticOmen' # 您的GitHub用户名
+    #       repo_name: 'TestReadme' # 您的仓库名
+    #       branch: 'main' # 指定要统计的分支，例如 main 或 master
+    #       output_file: 'assets/contribution-grid.svg' # 输出图片文件的路径
           
-      # 步骤三：将生成的图片提交回仓库
-      - name: Commit and Push
-        uses: stefanzweifel/git-auto-commit-action@v5
+    #   # 步骤三：将生成的图片提交回仓库
+    #   - name: Commit and Push
+    #     uses: stefanzweifel/git-auto-commit-action@v5
+    #     with:
+    #       commit_message: 'docs: update contribution grid'
+    #       file_pattern: 'assets/contribution-grid.svg'
+    steps:
+      - name: GitHub City
+        uses: lowlighter/metrics@latest
         with:
-          commit_message: 'docs: update contribution grid'
-          file_pattern: 'assets/contribution-grid.svg'
+          filename: metrics.plugin.skyline.city.svg
+          token: NOT_NEEDED
+          base: ""
+          plugin_skyline: yes
+          plugin_skyline_year: 2020
+          plugin_skyline_frames: 6
+          plugin_skyline_quality: 1
+          plugin_skyline_settings: |
+            {
+              "url": "https://honzaap.github.io/GithubCity?name=${login}&year=${year}",
+              "ready": "[...document.querySelectorAll('.display-info span')].map(span => span.innerText).includes('${login}')",
+              "wait": 4,
+              "hide": ".github-corner, .footer-link, .buttons-options, .mobile-rotate, .display-info span:first-child"
+            }
+             
