@@ -29,8 +29,8 @@ jobs:
         uses: gruber-jo/github-contribution-grid-svg@v1.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          user_name: 'YOUR_USERNAME' # 您的GitHub用户名
-          repo_name: 'YOUR_REPOSITORY_NAME' # 您的仓库名
+          user_name: 'nihilisticOmen' # 您的GitHub用户名
+          repo_name: 'TestReadme' # 您的仓库名
           branch: 'main' # 指定要统计的分支，例如 main 或 master
           output_file: 'assets/contribution-grid.svg' # 输出图片文件的路径
           
