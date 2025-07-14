@@ -1,61 +1,35 @@
-name: Generate Contribution Grid
-
+# .github/workflows/metrics.yml
+name: Metrics
 on:
-  # 1. 定时触发：每天的 00:00 (UTC时间) 自动运行
-  schedule:
-    - cron: "0 0 * * *"
-  # 2. 手动触发：允许您在 Actions 页面手动运行此工作流
+  # Schedule updates (each day)
+  schedule: [{cron: "0 0 * * *"}]
+  # Lines below let you run workflow manually and on each commit
   workflow_dispatch:
-  # 3. 推送触发：每次推送到 main/master 分支时也触发运行
-  push:
-    branches:
-      - main
-      - master
-
+  push: {branches: ["main", "master"]}
 jobs:
-  build:
+  github-metrics:
     runs-on: ubuntu-latest
-    # name: Generate-Contribution-Grid
-    # steps:
-    #   # 步骤一：检出代码，以便访问提交历史
-    #   - uses: actions/checkout@v4
-    #     with:
-    #       fetch-depth: 0
-      
-    #   # 步骤二：生成贡献图
-    #   # 将 'YOUR_USERNAME' 和 'YOUR_REPOSITORY_NAME' 替换为您的信息
-    #   # 您可以通过 'branch' 参数指定要分析的分支
-    #   - name: Generate Contribution Grid
-    #     uses: yoshi389111/github-contribution-grid-svg@v1.3.1
-    #     with:
-    #       github_token: ${{ secrets.GITHUB_TOKEN }}
-    #       user_name: 'nihilisticOmen' # 您的GitHub用户名
-    #       repo_name: 'TestReadme' # 您的仓库名
-    #       branch: 'main' # 指定要统计的分支，例如 main 或 master
-    #       output_file: 'assets/contribution-grid.svg' # 输出图片文件的路径
-          
-    #   # 步骤三：将生成的图片提交回仓库
-    #   - name: Commit and Push
-    #     uses: stefanzweifel/git-auto-commit-action@v5
-    #     with:
-    #       commit_message: 'docs: update contribution grid'
-    #       file_pattern: 'assets/contribution-grid.svg'
+    permissions:
+      contents: write
     steps:
-      - name: GitHub City
-        uses: lowlighter/metrics@latest
+      - uses: lowlighter/metrics@v3
         with:
-          filename: metrics.plugin.skyline.city.svg
-          token: NOT_NEEDED
+          # Your GitHub token
+          # The following scopes are required:
+          #  - public_access (default scope)
+          # The following additional scopes may be required:
+          #  - read:org      (for organization related metrics)
+          #  - read:user     (for user related metrics)
+          #  - read:packages (for some packages related metrics)
+          #  - repo          (optional, if you want to include private repositories)
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Options
+          user: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
           base: ""
-          plugin_skyline: yes
-          plugin_skyline_year: 2020
-          plugin_skyline_frames: 6
-          plugin_skyline_quality: 1
-          plugin_skyline_settings: |
-            {
-              "url": "https://honzaap.github.io/GithubCity?name=${login}&year=${year}",
-              "ready": "[...document.querySelectorAll('.display-info span')].map(span => span.innerText).includes('${login}')",
-              "wait": 4,
-              "hide": ".github-corner, .footer-link, .buttons-options, .mobile-rotate, .display-info span:first-child"
-            }
-             
+          filename: assets/metrics.svg
+          config_timezone: America/Los_Angeles # 可选，更改为您所在的时区
+          # 开启贡献图插件
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: full-year # 显示整年的贡献
